@@ -5,13 +5,14 @@
   "description": "This extension will try to give you a better feeling when you are reading articles",
   "version": "0.1",
 
-  "background": {"page": "bg.html"},
+  "background": { "scripts": ["background.js"] },
   "page_action": {
     "default_icon": "icon.png"
   },
   "permissions": ["tabs"],
   "content_scripts": [ 
 	{
+		//"matches": ["file:///*/*"],
 		"matches": ["*://*/*"],
 		"js": ["content.js"]
 	}
