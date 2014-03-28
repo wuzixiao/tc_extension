@@ -109,7 +109,7 @@ function get_node_rank(n) {
 
 	//4 
 	if(n.anchorTextCount > 0) {
-		temp = n.textCount / n.textCount;
+		temp = n.textCount / n.anchroTextCount;
 		rank += temp > 100 ? 100 : temp;
 	}
 	else
@@ -163,7 +163,7 @@ var pList = [];
 
 while(walker.nextNode()) {	
 
-	if(walker.currentNode.layout === 0){
+	if(walker.currentNode.layout == 0){
 		while(walker.lastChild()){}
 		continue;
 	}
@@ -181,6 +181,8 @@ while(walker.nextNode()) {
 		while(walker.lastChild()) {}
 		continue;
 	}
+
+	//add to first list
 	if(walker.currentNode.textCount < 200) {
 		//no need to use this tool for text length less than 200
 		pList.push(walker.currentNode);		
@@ -215,9 +217,7 @@ function check_node_similar(n1, n2) {
 
 	if(rank1 > rank2) {
 		rank += rank1 - rank2 ;
-
 	}
-
 }	
 /*
 var topList = [];
