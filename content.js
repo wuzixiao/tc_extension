@@ -102,14 +102,14 @@ function get_node_rank(n) {
 	rank += n.textCount * 100 / body.textCount;
 
 	//3 avarage node size
-	if(n.childrenCount > 0)
-		rank += (n.textCount-n.anchorTextCount) / n.childrenCount;
+	if(n.childrenCount > 1)
+		rank += (n.textCount-n.anchorTextCount) / (n.childrenCount + 1);
 	else
 		rank += n.textCount / 2;
 
 	//4 
-	if(n.anchorTextCount > 0) {
-		temp = n.textCount / n.anchroTextCount;
+	if(n.anchorTextCount > 1) {
+		temp = n.textCount / n.anchorTextCount;
 		rank += temp > 100 ? 100 : temp;
 	}
 	else
@@ -136,6 +136,26 @@ function walk2(n) {
 			walk2(n.children[i]);
 		}
 	}
+}
+
+function is_same_parent(n1, n2) {
+	n = n1.parentElement;
+	if(n == body)) 
+		return true;
+
+	while(block_element.indexOf(n.tagName) < 0) {
+		n = n.parentElement;
+	}
+	temp = n2.parentElement;
+	while(temp != body && temp != n) {
+		temp = temp.parentElement;
+	}
+
+	if(temp == n)
+		return true;
+
+	return false;
+	
 }
 
 var body = document.getElementsByTagName("body")[0];
@@ -176,7 +196,6 @@ while(walker.nextNode()) {
 		while(walker.lastChild()) {}
 		continue;
 	}
-	//have not get rid of 'return' in the innerText, so use (textCount-anchorCount)
 	else if(walker.currentNode.anchorTextCount / (walker.currentNode.textCount-walker.currentNode.anchorCount) > 0.8 ) {
 		while(walker.lastChild()) {}
 		continue;
@@ -208,8 +227,25 @@ for(var i = 0; i< pList.length; i++) {
 	}
 }
 
+/*
 console.log(pList[topIndex]);
 
+tempTop = topIndex;
+countInList = pList[topIndex].textCount;
+while(tempTop > 0) {
+	if(is_same_parent(pList[tempTop-1], pList[topIndex])) {
+		tempTop -= 1;
+		countInList += pList[tempTop].textCount;	
+	}
+}
+
+tempTop = topIndex;
+while(tempTop < pList.length-1) {
+	if(is_same_parent(pList[tempTop+1], pList[topIndex])) {
+		tempTop += 1;
+		countInList += pList[tempTop].textCount;	
+	}
+}
 function check_node_similar(n1, n2) {
 	var rank = 0;
 	rank1 = get_node_rank(n1);
@@ -219,7 +255,6 @@ function check_node_similar(n1, n2) {
 		rank += rank1 - rank2 ;
 	}
 }	
-/*
 var topList = [];
 for(var i = 0; i < pList.length; i++) {
 	if(similar(pList[i], topRank) > 50) {
